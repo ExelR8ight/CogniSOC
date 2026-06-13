@@ -1,0 +1,34 @@
+title: Living-off-the-Land Binary Execution
+id: sigma-evasion-002
+status: active
+description: >
+  Execution of known living-off-the-land binaries (LOLBins) such as certutil,
+  mshta, regsvr32, rundll32, or msbuild. Adversaries abuse these trusted
+  system utilities to proxy execution, download payloads, or bypass
+  application whitelisting.
+severity: high
+confidence: high
+
+mitre_attack:
+  - technique: T1218
+    tactic: Defense Evasion
+    name: System Binary Proxy Execution
+  - technique: T1105
+    tactic: Command and Control
+    name: Ingress Tool Transfer
+
+detection:
+  condition: all
+  features:
+    lolbin_count:
+      gte: 1
+
+incident_type: LOLBin Defense Evasion
+reason_template: >
+  Living-off-the-land binary execution detected ({lolbin_count} LOLBin
+  processes). Possible defense evasion or proxy execution.
+
+evidence_template:
+  - "{lolbin_count} LOLBin process executions"
+  - "{download_command_count} download commands"
+  - "{rare_process_count} rare processes"

@@ -1,0 +1,46 @@
+title: Insider Threat - Unusual Access Patterns
+id: sigma-insider-001
+status: active
+description: >
+  Detection of insider threat indicators such as abnormal data access
+  volumes, unusual credential usage, file staging for exfiltration,
+  and off-pattern process execution. Focuses on trusted users exhibiting
+  anomalous behavior deviating from their baseline.
+severity: high
+confidence: medium
+
+mitre_attack:
+  - technique: T1078
+    tactic: Persistence
+    name: Valid Accounts
+  - technique: T1074
+    tactic: Collection
+    name: Data Staged
+
+detection:
+  condition: any
+  features:
+    file_create_count:
+      gte: 20
+    dns_query_count:
+      gte: 50
+    external_connection_count:
+      gte: 3
+  severity_filter:
+    - critical
+    - high
+    - medium
+
+incident_type: Insider Threat - Unusual Access
+incident_category: Insider Threat
+reason_template: >
+  Insider threat indicators: {file_create_count} file creations,
+  {dns_query_count} DNS queries, {external_connection_count} external
+  connections suggest unusual data access or staging patterns.
+
+evidence_template:
+  - "{file_create_count} file creation/modification events"
+  - "{dns_query_count} DNS queries"
+  - "{external_connection_count} external connections"
+  - "{event_count} total events"
+  - "{unique_dest_ports} unique destination ports"

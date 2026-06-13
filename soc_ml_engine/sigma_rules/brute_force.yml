@@ -1,0 +1,31 @@
+title: Brute Force Authentication Attack
+id: sigma-access-001
+status: active
+description: >
+  High volume of authentication failures indicating brute force or
+  password spraying attack against local or domain accounts.
+severity: high
+confidence: high
+
+mitre_attack:
+  - technique: T1110.001
+    tactic: Credential Access
+    name: "Brute Force: Password Guessing"
+
+detection:
+  condition: all
+  features:
+    login_failure_count:
+      gte: 10
+    event_count:
+      gte: 50
+
+incident_type: Brute Force Authentication Attack
+reason_template: >
+  Brute force attack detected: {login_failure_count} failed authentication
+  attempts across {event_count} events.
+
+evidence_template:
+  - "{login_failure_count} failed login attempts"
+  - "{event_count} total authentication events"
+  - "{unique_dest_ports} targeted ports"

@@ -1,0 +1,54 @@
+[
+  {
+    "timestamp": "2026-05-25T20:30:00+00:00",
+    "host": "DESKTOP-980KV5U",
+    "source_ip": "172.16.140.152",
+    "entity": "DESKTOP-980KV5U",
+    "event_type": "file_created",
+    "anomaly_score": 100.0,
+    "severity": "critical",
+    "priority": "P1",
+    "confidence": "high",
+    "reason": "PowerShell activity above baseline; rare process observed; rare process sample: appinstallerpythonredirector.exe, control.exe, nslookup.exe",
+    "score_components": {
+      "isolation_forest_percentile": 100.0,
+      "baseline_deviation_score": 100.0,
+      "raw_model_score": 0.1127
+    },
+    "risk_factors": [
+      "PowerShell execution volume",
+      "Command shell execution volume",
+      "Rare process execution",
+      "Network connection volume"
+    ],
+    "mitre_context": [
+      "Execution: PowerShell",
+      "Execution: Command and Scripting Interpreter",
+      "Execution: uncommon process observed"
+    ],
+    "recommended_actions": [
+      "Pivot in Splunk on host/source IP and the 15-minute time window.",
+      "Review parent-child process chain and command line for the listed processes.",
+      "Inspect PowerShell Script Block, Sysmon Event ID 1, and encoded command usage.",
+      "Validate rare process hashes, signer, path, and user context.",
+      "Open an incident case if activity is not expected lab/admin behavior."
+    ],
+    "features": {
+      "event_count": 550,
+      "powershell_count": 364,
+      "cmd_count": 7,
+      "unique_dest_ports": 2,
+      "connection_count": 12,
+      "rare_process_count": 5,
+      "unexpected_parent_child_count": 0,
+      "suricata_alert_count": 0
+    },
+    "rare_processes": [
+      "appinstallerpythonredirector.exe",
+      "control.exe",
+      "nslookup.exe"
+    ],
+    "unexpected_parent_child_pairs": [],
+    "source": "soc_ml_engine"
+  }
+]

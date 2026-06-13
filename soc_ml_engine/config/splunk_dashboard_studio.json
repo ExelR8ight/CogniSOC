@@ -1,0 +1,652 @@
+{
+    "title": "SOC Command Center - Enterprise Threat Detection & Analysis",
+    "description": "ML-powered Security Operations Center dashboard with MITRE ATT&CK mapping, anomaly detection, incident correlation, and real-time threat visibility.",
+    "visualizations": {
+        "viz_title": {
+            "type": "splunk.markdown",
+            "options": {
+                "markdown": "# SOC COMMAND CENTER\n**Enterprise Threat Detection & ML Anomaly Analysis** | Isolation Forest + Sigma Rules + MITRE ATT&CK"
+            }
+        },
+        "viz_kpi_total_events": {
+            "type": "splunk.singlevalue",
+            "options": {
+                "majorColor": "#3fc6f0",
+                "backgroundColor": "#1a1c24",
+                "sparklineDisplay": "below",
+                "trendDisplay": "percent",
+                "unit": "",
+                "numberPrecision": 0,
+                "underLabel": "Total Events"
+            },
+            "dataSources": { "primary": "ds_total_events" }
+        },
+        "viz_kpi_ml_findings": {
+            "type": "splunk.singlevalue",
+            "options": {
+                "majorColor": "#f5a623",
+                "backgroundColor": "#1a1c24",
+                "sparklineDisplay": "below",
+                "unit": "",
+                "numberPrecision": 0,
+                "underLabel": "ML Findings"
+            },
+            "dataSources": { "primary": "ds_ml_findings_count" }
+        },
+        "viz_kpi_incidents": {
+            "type": "splunk.singlevalue",
+            "options": {
+                "majorColor": "#e74c3c",
+                "backgroundColor": "#1a1c24",
+                "sparklineDisplay": "below",
+                "unit": "",
+                "numberPrecision": 0,
+                "underLabel": "Incidents"
+            },
+            "dataSources": { "primary": "ds_incident_count" }
+        },
+        "viz_kpi_p1_critical": {
+            "type": "splunk.singlevalue",
+            "options": {
+                "majorColor": "#ff0044",
+                "backgroundColor": "#1a1c24",
+                "unit": "",
+                "numberPrecision": 0,
+                "underLabel": "P1 Critical"
+            },
+            "dataSources": { "primary": "ds_p1_count" }
+        },
+        "viz_kpi_risk": {
+            "type": "splunk.singlevalue",
+            "options": {
+                "majorColor": "#e74c3c",
+                "backgroundColor": "#1a1c24",
+                "underLabel": "Risk Rating"
+            },
+            "dataSources": { "primary": "ds_risk_rating" }
+        },
+        "viz_kpi_mitre": {
+            "type": "splunk.singlevalue",
+            "options": {
+                "majorColor": "#9b59b6",
+                "backgroundColor": "#1a1c24",
+                "unit": "",
+                "numberPrecision": 0,
+                "underLabel": "MITRE Techniques"
+            },
+            "dataSources": { "primary": "ds_mitre_technique_count" }
+        },
+        "viz_kpi_mttd": {
+            "type": "splunk.singlevalue",
+            "options": {
+                "majorColor": "#2ecc71",
+                "backgroundColor": "#1a1c24",
+                "unit": "min",
+                "numberPrecision": 0,
+                "underLabel": "Mean Time to Detect"
+            },
+            "dataSources": { "primary": "ds_mttd" }
+        },
+        "viz_kpi_suricata": {
+            "type": "splunk.singlevalue",
+            "options": {
+                "majorColor": "#e67e22",
+                "backgroundColor": "#1a1c24",
+                "sparklineDisplay": "below",
+                "unit": "",
+                "numberPrecision": 0,
+                "underLabel": "IDS Alerts"
+            },
+            "dataSources": { "primary": "ds_suricata_alert_count" }
+        },
+        "viz_incident_summary_donut": {
+            "type": "splunk.pie",
+            "options": {
+                "showDonutHole": true,
+                "seriesColors": ["#ff0044","#e74c3c","#f5a623","#2ecc71","#3fc6f0"]
+            },
+            "title": "Incident Summary",
+            "dataSources": { "primary": "ds_severity_dist" }
+        },
+        "viz_incident_summary_table": {
+            "type": "splunk.table",
+            "options": { "count": 10, "backgroundColor": "#1a1c24" },
+            "title": "Severity Breakdown",
+            "dataSources": { "primary": "ds_severity_breakdown" }
+        },
+        "viz_incident_timeline_30d": {
+            "type": "splunk.line",
+            "options": {
+                "seriesColors": ["#ff0044","#e74c3c","#f5a623","#2ecc71","#3fc6f0"],
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Incidents",
+                "showDataLabels": "none",
+                "nullValueDisplay": "connect",
+                "backgroundColor": "#1a1c24",
+                "legendDisplay": "bottom"
+            },
+            "title": "Incident Timeline",
+            "dataSources": { "primary": "ds_incident_timeline" }
+        },
+        "viz_anomaly_scores_trend": {
+            "type": "splunk.area",
+            "options": {
+                "seriesColors": ["#ff004480","#3fc6f080"],
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Anomaly Score",
+                "showDataLabels": "none",
+                "nullValueDisplay": "connect",
+                "backgroundColor": "#1a1c24",
+                "legendDisplay": "bottom"
+            },
+            "title": "ML Anomaly Score Trend (Isolation Forest)",
+            "dataSources": { "primary": "ds_anomaly_scores" }
+        },
+        "viz_category_bar": {
+            "type": "splunk.bar",
+            "options": {
+                "seriesColors": ["#3fc6f0","#e74c3c","#f5a623","#9b59b6","#2ecc71","#e67e22","#1abc9c"],
+                "xAxisTitleText": "Incidents",
+                "orientation": "horizontal",
+                "backgroundColor": "#1a1c24",
+                "legendDisplay": "bottom"
+            },
+            "title": "Incidents by Category",
+            "dataSources": { "primary": "ds_category_dist" }
+        },
+        "viz_top_hosts": {
+            "type": "splunk.bar",
+            "options": {
+                "seriesColors": ["#e74c3c"],
+                "orientation": "horizontal",
+                "backgroundColor": "#1a1c24"
+            },
+            "title": "Top Attacked Hosts",
+            "dataSources": { "primary": "ds_top_hosts" }
+        },
+        "viz_top_source_ips": {
+            "type": "splunk.bar",
+            "options": {
+                "seriesColors": ["#e67e22"],
+                "orientation": "horizontal",
+                "backgroundColor": "#1a1c24"
+            },
+            "title": "Top Attacker IPs",
+            "dataSources": { "primary": "ds_top_source_ips" }
+        },
+        "viz_mitre_heatmap": {
+            "type": "splunk.column",
+            "options": {
+                "seriesColors": ["#3fc6f0","#2ecc71","#f5a623","#e74c3c","#9b59b6","#e67e22","#1abc9c","#ff0044"],
+                "xAxisTitleText": "MITRE Technique",
+                "yAxisTitleText": "Detections",
+                "showDataLabels": "all",
+                "backgroundColor": "#1a1c24",
+                "stackMode": "stacked",
+                "legendDisplay": "bottom"
+            },
+            "title": "MITRE ATT&CK Technique Detections by Tactic",
+            "dataSources": { "primary": "ds_mitre_by_tactic" }
+        },
+        "viz_mitre_tactic_pie": {
+            "type": "splunk.pie",
+            "options": {
+                "showDonutHole": true,
+                "seriesColors": ["#3fc6f0","#e74c3c","#f5a623","#9b59b6","#2ecc71","#e67e22","#1abc9c","#ff0044"]
+            },
+            "title": "MITRE Tactic Distribution",
+            "dataSources": { "primary": "ds_mitre_tactics" }
+        },
+        "viz_kill_chain_table": {
+            "type": "splunk.table",
+            "options": { "count": 20, "drilldown": "row", "backgroundColor": "#1a1c24" },
+            "title": "Kill Chain Progression - Attack Timelines",
+            "dataSources": { "primary": "ds_attack_chain" }
+        },
+        "viz_mitre_coverage": {
+            "type": "splunk.table",
+            "options": { "count": 30, "backgroundColor": "#1a1c24" },
+            "title": "MITRE ATT&CK Coverage Matrix",
+            "dataSources": { "primary": "ds_mitre_coverage" }
+        },
+        "viz_disposition_tp": {
+            "type": "splunk.singlevalue",
+            "options": { "majorColor": "#2ecc71", "backgroundColor": "#1a1c24", "unit": "", "numberPrecision": 0, "underLabel": "True Positives" },
+            "dataSources": { "primary": "ds_disposition_tp" }
+        },
+        "viz_disposition_fp": {
+            "type": "splunk.singlevalue",
+            "options": { "majorColor": "#e67e22", "backgroundColor": "#1a1c24", "unit": "", "numberPrecision": 0, "underLabel": "False Positives" },
+            "dataSources": { "primary": "ds_disposition_fp" }
+        },
+        "viz_disposition_pending": {
+            "type": "splunk.singlevalue",
+            "options": { "majorColor": "#95a5a6", "backgroundColor": "#1a1c24", "unit": "", "numberPrecision": 0, "underLabel": "Pending Review" },
+            "dataSources": { "primary": "ds_disposition_pending" }
+        },
+        "viz_feature_importance": {
+            "type": "splunk.bar",
+            "options": { "seriesColors": ["#9b59b6"], "orientation": "horizontal", "backgroundColor": "#1a1c24" },
+            "title": "ML Feature Contribution",
+            "dataSources": { "primary": "ds_feature_importance" }
+        },
+        "viz_findings_detail": {
+            "type": "splunk.table",
+            "options": { "count": 15, "dataOverlayMode": "heatmap", "backgroundColor": "#1a1c24" },
+            "title": "ML Anomaly Findings - Detailed View",
+            "dataSources": { "primary": "ds_ml_findings_detail" }
+        },
+        "viz_sysmon_timeline": {
+            "type": "splunk.area",
+            "options": {
+                "seriesColors": ["#3fc6f0","#f5a623","#e74c3c","#9b59b6","#2ecc71","#e67e22"],
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Events",
+                "stackMode": "stacked",
+                "backgroundColor": "#1a1c24",
+                "legendDisplay": "bottom"
+            },
+            "title": "Sysmon Events Over Time",
+            "dataSources": { "primary": "ds_sysmon_timeline" }
+        },
+        "viz_suricata_timeline": {
+            "type": "splunk.area",
+            "options": {
+                "seriesColors": ["#e74c3c","#f5a623","#2ecc71"],
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Alerts",
+                "stackMode": "stacked",
+                "backgroundColor": "#1a1c24",
+                "legendDisplay": "bottom"
+            },
+            "title": "Suricata IDS Alerts Over Time",
+            "dataSources": { "primary": "ds_suricata_timeline" }
+        },
+        "viz_suricata_top_sigs": {
+            "type": "splunk.bar",
+            "options": { "seriesColors": ["#e67e22"], "orientation": "horizontal", "backgroundColor": "#1a1c24" },
+            "title": "Top Suricata Signatures",
+            "dataSources": { "primary": "ds_suricata_top_sigs" }
+        },
+        "viz_auth_failures": {
+            "type": "splunk.column",
+            "options": { "seriesColors": ["#e74c3c"], "xAxisTitleText": "Time", "yAxisTitleText": "Failed Logins", "backgroundColor": "#1a1c24" },
+            "title": "Authentication Failures (4625)",
+            "dataSources": { "primary": "ds_auth_failures" }
+        },
+        "viz_network_conns": {
+            "type": "splunk.line",
+            "options": { "seriesColors": ["#3fc6f0","#f5a623"], "xAxisTitleText": "Time", "yAxisTitleText": "Connections", "backgroundColor": "#1a1c24", "legendDisplay": "bottom" },
+            "title": "Network Connections",
+            "dataSources": { "primary": "ds_network_connections" }
+        },
+        "viz_dns_queries": {
+            "type": "splunk.bar",
+            "options": { "seriesColors": ["#9b59b6"], "orientation": "horizontal", "backgroundColor": "#1a1c24" },
+            "title": "Top DNS Queries",
+            "dataSources": { "primary": "ds_dns_queries" }
+        },
+        "viz_sysmon_processes": {
+            "type": "splunk.table",
+            "options": { "count": 10, "backgroundColor": "#1a1c24" },
+            "title": "Suspicious Process Creations (Sysmon)",
+            "dataSources": { "primary": "ds_sysmon_processes" }
+        },
+        "viz_incident_detail": {
+            "type": "splunk.table",
+            "options": { "count": 20, "drilldown": "row", "backgroundColor": "#1a1c24" },
+            "title": "Correlated Incidents - Full Detail",
+            "dataSources": { "primary": "ds_incident_detail" }
+        },
+        "viz_remediation": {
+            "type": "splunk.table",
+            "options": { "count": 20, "backgroundColor": "#1a1c24" },
+            "title": "Recommended Remediation Actions",
+            "dataSources": { "primary": "ds_remediation" }
+        },
+        "viz_priority_dist": {
+            "type": "splunk.column",
+            "options": {
+                "seriesColors": ["#ff0044","#e74c3c","#f5a623","#2ecc71"],
+                "xAxisTitleText": "Priority",
+                "yAxisTitleText": "Count",
+                "showDataLabels": "all",
+                "backgroundColor": "#1a1c24"
+            },
+            "title": "Priority Distribution",
+            "dataSources": { "primary": "ds_priority_dist" }
+        },
+        "viz_anomaly_severity": {
+            "type": "splunk.pie",
+            "options": {
+                "showDonutHole": true,
+                "seriesColors": ["#ff0044","#e74c3c","#f5a623","#2ecc71"]
+            },
+            "title": "ML Finding Severity",
+            "dataSources": { "primary": "ds_anomaly_severity" }
+        },
+        "viz_data_sources_ingest": {
+            "type": "splunk.column",
+            "options": {
+                "seriesColors": ["#3fc6f0","#f5a623","#2ecc71","#e74c3c"],
+                "xAxisTitleText": "Time",
+                "yAxisTitleText": "Events",
+                "stackMode": "stacked",
+                "backgroundColor": "#1a1c24",
+                "legendDisplay": "bottom"
+            },
+            "title": "Incoming Data Sources",
+            "dataSources": { "primary": "ds_data_sources_ingest" }
+        },
+        "viz_audit_log": {
+            "type": "splunk.table",
+            "options": { "count": 20, "backgroundColor": "#1a1c24" },
+            "title": "Detection Audit Log",
+            "dataSources": { "primary": "ds_audit_log" }
+        }
+    },
+    "dataSources": {
+        "ds_total_events": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main (sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational OR sourcetype=suricata OR sourcetype=WinEventLog:Security) | stats count as total_events",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_ml_findings_count": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:anomaly\" | stats count as ml_findings | append [| makeresults | eval ml_findings=0] | stats max(ml_findings) as ml_findings",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_incident_count": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | stats count as incidents | append [| makeresults | eval incidents=0] | stats max(incidents) as incidents",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_p1_count": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" priority_level=\"P1\" | stats count as p1_count | append [| makeresults | eval p1_count=0] | stats max(p1_count) as p1_count",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_risk_rating": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | eval sev_score=case(severity==\"Critical\", 4, severity==\"High\", 3, severity==\"Medium\", 2, severity==\"Low\", 1, true(), 0) | stats max(sev_score) as max_sev count(eval(priority_level==\"P1\")) as p1_count | eval risk_rating=case(max_sev>=4 OR p1_count>=2, \"CRITICAL\", max_sev>=3 OR p1_count>=1, \"HIGH\", max_sev>=2, \"MEDIUM\", true(), \"LOW\") | table risk_rating",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_mitre_technique_count": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | stats dc(attack_technique) as unique_techniques | append [| makeresults | eval unique_techniques=0] | stats max(unique_techniques) as unique_techniques",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_mttd": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | eval detect_lag=now()-_time | stats avg(detect_lag) as avg_lag | eval mttd=round(avg_lag/60, 0) | table mttd | append [| makeresults | eval mttd=0] | stats max(mttd) as mttd",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_suricata_alert_count": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=suricata event_type=alert | stats count as suricata_alerts | append [| makeresults | eval suricata_alerts=0] | stats max(suricata_alerts) as suricata_alerts",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_severity_dist": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | stats count by severity | sort -count",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_severity_breakdown": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | chart count by severity priority_level | addtotals fieldname=Total",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_incident_timeline": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | timechart span=1h count by severity",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_category_dist": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | eval incident_category=coalesce(incident_category, \"Unclassified\") | stats count by incident_category | sort -count",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_anomaly_scores": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:anomaly\" | timechart span=5m avg(anomaly_score) as \"Avg Score\" max(anomaly_score) as \"Max Score\"",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_top_hosts": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | top limit=10 host | fields host count",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_top_source_ips": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" source_ip!=\"\" | top limit=10 source_ip | fields source_ip count",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_mitre_by_tactic": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | eval tactic=mvindex(mitre_tactics, 0) | eval tactic=coalesce(tactic, \"Unknown\") | chart count over attack_technique by tactic | sort -count",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_mitre_tactics": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | eval tactic=mvindex(mitre_tactics, 0) | search tactic=* | stats count by tactic | sort -count",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_attack_chain": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | table _time host incident_type incident_category attack_technique severity priority_level timeline_stage | sort -priority_level _time",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_mitre_coverage": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | stats count values(incident_type) as detection_rules first(severity) as severity by attack_technique | eval tactic=case(match(attack_technique, \"T1046\"), \"Discovery\", match(attack_technique, \"T1059\"), \"Execution\", match(attack_technique, \"T1110\"), \"Credential Access\", match(attack_technique, \"T1027\"), \"Defense Evasion\", match(attack_technique, \"T1218\"), \"Defense Evasion\", match(attack_technique, \"T1003\"), \"Credential Access\", match(attack_technique, \"T1048\"), \"Exfiltration\", match(attack_technique, \"T1204\"), \"Execution\", match(attack_technique, \"T1498\"), \"Impact\", match(attack_technique, \"T1566\"), \"Initial Access\", match(attack_technique, \"T1074\"), \"Collection\", match(attack_technique, \"T1078\"), \"Persistence\", true(), \"Unknown\") | table attack_technique tactic detection_rules count severity | sort tactic",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_disposition_tp": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" severity IN (\"Critical\", \"High\") | stats count as true_positives | append [| makeresults | eval true_positives=0] | stats max(true_positives) as true_positives",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_disposition_fp": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" severity=\"Low\" | stats count as false_positives | append [| makeresults | eval false_positives=0] | stats max(false_positives) as false_positives",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_disposition_pending": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" severity=\"Medium\" | stats count as pending | append [| makeresults | eval pending=0] | stats max(pending) as pending",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_feature_importance": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:anomaly\" | stats avg(powershell_count) as PowerShell avg(unique_dest_ports) as Unique_Ports avg(connection_count) as Connections avg(suricata_alert_count) as IDS_Alerts avg(rare_process_count) as Rare_Procs avg(encoded_command_count) as Encoded_Cmds avg(file_create_count) as File_Creates avg(dns_query_count) as DNS_Queries avg(external_connection_count) as External_Conns avg(lolbin_count) as LOLBins | transpose 0 header_field=none column_name=Feature | rename \"row 1\" as avg_value | sort -avg_value",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_ml_findings_detail": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:anomaly\" | table _time host source_ip severity anomaly_score reason powershell_count unique_dest_ports connection_count suricata_alert_count | sort -anomaly_score",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_anomaly_severity": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:anomaly\" | stats count by severity | sort -count",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_priority_dist": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | stats count by priority_level | sort priority_level",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_sysmon_timeline": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational | eval EventName=case(EventCode==1, \"Process Create\", EventCode==3, \"Network Connect\", EventCode==7, \"Image Load\", EventCode==11, \"File Create\", EventCode==13, \"Registry\", EventCode==22, \"DNS Query\", true(), \"Other\") | timechart span=5m count by EventName",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_sysmon_processes": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational EventCode=1 | table _time Image ParentImage User CommandLine | head 30",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_suricata_timeline": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=suricata event_type=alert | eval sev=coalesce(alert.severity, severity, 3) | eval sev_name=case(sev==1, \"Critical\", sev==2, \"High\", sev==3, \"Medium\", true(), \"Low\") | timechart span=5m count by sev_name",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_suricata_top_sigs": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=suricata event_type=alert | eval sig=coalesce(alert.signature, signature, \"Unknown\") | top limit=10 sig | rename sig as Signature",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_auth_failures": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=WinEventLog:Security EventCode=4625 | timechart span=5m count as failed_logins",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_network_connections": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational EventCode=3 | eval direction=if(Initiated==\"true\", \"Outbound\", \"Inbound\") | timechart span=5m count by direction",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_dns_queries": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=XmlWinEventLog:Microsoft-Windows-Sysmon/Operational EventCode=22 | eval domain=coalesce(QueryName, \"Unknown\") | top limit=15 domain | fields domain count",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_incident_detail": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | table _time incident_type incident_category severity priority_level priority_score attack_technique host source_ip confidence | sort -priority_score",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_remediation": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main sourcetype=\"soc:ml:incident\" | eval remediation=mvjoin(remediation_actions, \" | \") | table _time incident_type attack_technique severity host remediation | sort -severity",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_data_sources_ingest": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main | eval src=case(sourcetype==\"XmlWinEventLog:Microsoft-Windows-Sysmon/Operational\", \"Sysmon\", sourcetype==\"suricata\", \"Suricata\", sourcetype==\"WinEventLog:Security\", \"WinSecurity\", match(sourcetype, \"soc:ml\"), \"ML Engine\", true(), \"Other\") | timechart span=1h count by src",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_data_source_count": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main | stats dc(sourcetype) as data_sources",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        },
+        "ds_audit_log": {
+            "type": "ds.search",
+            "options": {
+                "query": "index=main (sourcetype=\"soc:ml:anomaly\" OR sourcetype=\"soc:ml:incident\") | eval action=case(sourcetype==\"soc:ml:anomaly\", \"ML Detection\", sourcetype==\"soc:ml:incident\", \"Incident Correlation\") | table _time action incident_type severity host attack_technique priority_level | sort -_time",
+                "queryParameters": { "earliest": "$time_range.earliest$", "latest": "$time_range.latest$" }
+            }
+        }
+    },
+    "inputs": {
+        "time_range": {
+            "type": "input.timerange",
+            "options": { "token": "time_range", "defaultValue": "-24h,now" },
+            "title": "Time Range"
+        },
+        "input_severity": {
+            "type": "input.dropdown",
+            "options": {
+                "token": "severity_filter",
+                "defaultValue": "*",
+                "items": [
+                    { "label": "All Severities", "value": "*" },
+                    { "label": "Critical", "value": "Critical" },
+                    { "label": "High", "value": "High" },
+                    { "label": "Medium", "value": "Medium" },
+                    { "label": "Low", "value": "Low" }
+                ]
+            },
+            "title": "Severity"
+        }
+    },
+    "defaults": {
+        "dataSources": {
+            "ds.search": {
+                "options": {
+                    "queryParameters": { "earliest": "-24h@h", "latest": "now" }
+                }
+            }
+        }
+    },
+    "layout": {
+        "type": "absolute",
+        "options": { "display": "auto-scale", "width": 1440, "height": 6300 },
+        "structure": []
+    }
+}

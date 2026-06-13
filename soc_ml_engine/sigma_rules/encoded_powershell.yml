@@ -1,0 +1,35 @@
+title: Encoded PowerShell Command Execution
+id: sigma-evasion-001
+status: active
+description: >
+  Encoded PowerShell commands are frequently used by adversaries to obfuscate
+  malicious scripts and bypass command-line logging. Detection of
+  -EncodedCommand flags alongside download activity is highly suspicious.
+severity: critical
+confidence: high
+
+mitre_attack:
+  - technique: T1027
+    tactic: Defense Evasion
+    name: Obfuscated Files or Information
+  - technique: T1059.001
+    tactic: Execution
+    name: "Command and Scripting Interpreter: PowerShell"
+
+detection:
+  condition: all
+  features:
+    encoded_command_count:
+      gte: 1
+    powershell_count:
+      gte: 1
+
+incident_type: Encoded PowerShell Execution
+reason_template: >
+  Encoded PowerShell command detected ({encoded_command_count} encoded commands,
+  {powershell_count} total PowerShell executions). Possible defense evasion.
+
+evidence_template:
+  - "{encoded_command_count} encoded PowerShell commands"
+  - "{powershell_count} total PowerShell executions"
+  - "{download_command_count} download commands"

@@ -1,0 +1,24 @@
+{
+  "splunk": {
+    "scheme": "https",
+    "host": "172.16.140.130",
+    "port": 8089,
+    "username": "ankit",
+    "verify_ssl": false,
+    "index": "main",
+    "earliest_time": "-24h",
+    "latest_time": "now",
+    "timeout_seconds": 30,
+    "retry_count": 3,
+    "page_size": 5000
+  },
+  "engine": {
+    "model_path": "soc_ml_engine/outputs/isolation_forest_model.pkl",
+    "suspicious_output_path": "soc_ml_engine/outputs/suspicious_events.json",
+    "splunk_hec_output_path": "soc_ml_engine/outputs/splunk_hec_events.ndjson",
+    "window_minutes": 15,
+    "contamination": 0.05,
+    "output_min_score": 50.0,
+    "max_events": 100000
+  }
+}

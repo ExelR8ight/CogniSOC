@@ -1,0 +1,34 @@
+title: Suspicious PowerShell Activity
+id: sigma-exec-001
+status: active
+description: >
+  High frequency of PowerShell process execution during an anomalous behavior
+  window. Often associated with post-exploitation, living-off-the-land, or
+  fileless attack techniques.
+severity: high
+confidence: medium
+
+mitre_attack:
+  - technique: T1059.001
+    tactic: Execution
+    name: "Command and Scripting Interpreter: PowerShell"
+
+detection:
+  condition: all
+  features:
+    powershell_count:
+      gte: 10
+  severity_filter:
+    - critical
+    - high
+    - medium
+
+incident_type: Suspicious PowerShell Activity
+reason_template: >
+  High PowerShell execution frequency ({powershell_count} executions) with
+  anomalous behavior detected.
+
+evidence_template:
+  - "{powershell_count} PowerShell executions"
+  - "{cmd_count} cmd.exe executions"
+  - "Anomaly score context"

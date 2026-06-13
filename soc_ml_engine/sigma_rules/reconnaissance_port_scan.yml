@@ -1,0 +1,34 @@
+title: Network Reconnaissance - Port Scanning
+id: sigma-recon-001
+status: active
+description: >
+  High destination port diversity combined with Suricata IDS alerts indicates
+  active network service scanning or enumeration against the target environment.
+severity: critical
+confidence: high
+
+mitre_attack:
+  - technique: T1046
+    tactic: Discovery
+    name: Network Service Scanning
+
+detection:
+  condition: all
+  features:
+    unique_dest_ports:
+      gte: 100
+    suricata_alert_count:
+      gte: 2
+  severity_filter:
+    - critical
+    - high
+
+incident_type: Reconnaissance Activity
+reason_template: >
+  Correlated network scanning behavior detected: {unique_dest_ports} unique
+  destination ports with {suricata_alert_count} Suricata alerts.
+
+evidence_template:
+  - "{unique_dest_ports} unique destination ports"
+  - "{suricata_alert_count} Suricata alerts"
+  - "{connection_count} network connections"

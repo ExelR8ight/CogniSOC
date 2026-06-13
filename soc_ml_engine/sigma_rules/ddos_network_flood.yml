@@ -1,0 +1,37 @@
+title: DDoS / Network Flood Indicators
+id: sigma-dos-001
+status: active
+description: >
+  Extremely high network connection volume with elevated Suricata IDS
+  alerts indicating a distributed denial-of-service attack or network
+  flood targeting infrastructure services.
+severity: critical
+confidence: medium
+
+mitre_attack:
+  - technique: T1498
+    tactic: Impact
+    name: Network Denial of Service
+  - technique: T1499
+    tactic: Impact
+    name: Endpoint Denial of Service
+
+detection:
+  condition: all
+  features:
+    connection_count:
+      gte: 500
+    suricata_alert_count:
+      gte: 5
+
+incident_type: DDoS / Network Flood
+incident_category: DDoS
+reason_template: >
+  DDoS/network flood indicators: {connection_count} network connections
+  with {suricata_alert_count} Suricata IDS alerts detected.
+
+evidence_template:
+  - "{connection_count} network connections"
+  - "{suricata_alert_count} Suricata IDS alerts"
+  - "{unique_dest_ports} unique destination ports"
+  - "{external_connection_count} external connections"

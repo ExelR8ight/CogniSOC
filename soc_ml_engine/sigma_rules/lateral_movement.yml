@@ -1,0 +1,39 @@
+title: Lateral Movement Indicators
+id: sigma-lateral-001
+status: active
+description: >
+  Combination of high-risk process execution (credential tools, remote
+  execution utilities) with external network connections. Indicates
+  potential lateral movement or credential harvesting activity.
+severity: critical
+confidence: high
+
+mitre_attack:
+  - technique: T1021
+    tactic: Lateral Movement
+    name: Remote Services
+  - technique: T1003
+    tactic: Credential Access
+    name: OS Credential Dumping
+
+detection:
+  condition: any
+  features:
+    high_risk_process_count:
+      gte: 1
+    external_connection_count:
+      gte: 3
+  severity_filter:
+    - critical
+    - high
+
+incident_type: Lateral Movement / Credential Access
+reason_template: >
+  Lateral movement indicators detected: {high_risk_process_count} high-risk
+  processes, {external_connection_count} external connections.
+
+evidence_template:
+  - "{high_risk_process_count} high-risk process executions"
+  - "{external_connection_count} external (non-RFC1918) connections"
+  - "{connection_count} total network connections"
+  - "{unique_dest_ports} unique destination ports"

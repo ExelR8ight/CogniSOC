@@ -1,0 +1,38 @@
+title: Data Exfiltration Indicators
+id: sigma-exfil-001
+status: active
+description: >
+  Combination of high external connection count and elevated network
+  activity indicates potential data exfiltration over network channels.
+severity: critical
+confidence: medium
+
+mitre_attack:
+  - technique: T1048
+    tactic: Exfiltration
+    name: Exfiltration Over Alternative Protocol
+  - technique: T1071
+    tactic: Command and Control
+    name: Application Layer Protocol
+
+detection:
+  condition: all
+  features:
+    external_connection_count:
+      gte: 5
+    connection_count:
+      gte: 100
+  severity_filter:
+    - critical
+    - high
+
+incident_type: Data Exfiltration Activity
+reason_template: >
+  Potential data exfiltration: {external_connection_count} external connections
+  with {connection_count} total network connections detected.
+
+evidence_template:
+  - "{external_connection_count} external (non-RFC1918) connections"
+  - "{connection_count} total network connections"
+  - "{dns_query_count} DNS queries"
+  - "{unique_dest_ports} unique destination ports"

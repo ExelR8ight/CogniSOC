@@ -1,0 +1,44 @@
+title: Phishing - Malicious Document Execution
+id: sigma-phish-001
+status: active
+description: >
+  Detection of phishing attack indicators where a document or email
+  attachment spawns suspicious child processes. Covers macro-enabled
+  documents, HTML smuggling, and weaponized attachments that spawn
+  PowerShell, cmd.exe, or LOLBins.
+severity: high
+confidence: high
+
+mitre_attack:
+  - technique: T1566.001
+    tactic: Initial Access
+    name: "Phishing: Spearphishing Attachment"
+  - technique: T1204.002
+    tactic: Execution
+    name: "User Execution: Malicious File"
+
+detection:
+  condition: all
+  features:
+    suspicious_parent_child_count:
+      gte: 1
+    powershell_count:
+      gte: 1
+  severity_filter:
+    - critical
+    - high
+    - medium
+
+incident_type: Phishing - Document Execution
+incident_category: Phishing
+reason_template: >
+  Phishing indicators detected: {suspicious_parent_child_count} suspicious
+  parent-child process chains with {powershell_count} PowerShell executions,
+  suggesting malicious document or email attachment execution.
+
+evidence_template:
+  - "{suspicious_parent_child_count} suspicious parent-child chains"
+  - "{powershell_count} PowerShell executions"
+  - "{encoded_command_count} encoded commands"
+  - "{download_command_count} download commands"
+  - "{lolbin_count} LOLBin executions"

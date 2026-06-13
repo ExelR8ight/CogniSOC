@@ -1,0 +1,36 @@
+title: Suspicious Parent-Child Process Chain
+id: sigma-evasion-003
+status: active
+description: >
+  Detection of suspicious parent-child process relationships commonly used
+  in document-based attacks, macro execution, and defense evasion. Examples
+  include Office applications spawning cmd.exe or PowerShell.
+severity: high
+confidence: high
+
+mitre_attack:
+  - technique: T1204.002
+    tactic: Execution
+    name: "User Execution: Malicious File"
+  - technique: T1055
+    tactic: Defense Evasion
+    name: Process Injection
+
+detection:
+  condition: all
+  features:
+    suspicious_parent_child_count:
+      gte: 1
+    unexpected_parent_child_count:
+      gte: 1
+
+incident_type: Defense Evasion - Suspicious Process Chain
+reason_template: >
+  Suspicious parent-child process chain detected ({suspicious_parent_child_count}
+  suspicious chains, {unexpected_parent_child_count} unexpected pairs).
+
+evidence_template:
+  - "{suspicious_parent_child_count} suspicious parent-child chains"
+  - "{unexpected_parent_child_count} unexpected parent-child pairs"
+  - "{rare_process_count} rare processes"
+  - "{lolbin_count} LOLBin executions"
