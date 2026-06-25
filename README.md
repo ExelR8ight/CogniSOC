@@ -39,7 +39,9 @@ CogniSOC operates on a heavily instrumented, 4-tier architecture deployed in an 
 2. **Network Visibility (Suricata)**: A centralized Suricata Intrusion Detection System (IDS) inspects all network traffic, applying the Emerging Threats (ET) Open ruleset to detect malicious flows, C2 beacons, and reconnaissance scans.
 
 <p align="center">
-  <img src="report/images/sysmon_config_xml.png" alt="Sysmon Config" width="45%"/>
+  <img src="report/images/sysmon_config_xml.png" alt="Sysmon Config" width="90%"/>
+</p>
+<p align="center">
   <img src="report/images/suricata_config.png" alt="Suricata Config" width="45%"/>
 </p>
 
