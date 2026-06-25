@@ -122,9 +122,9 @@
       #text(size: 12pt, weight: "bold")[Submitted By:] \
       #v(0.3cm)
       Ankit Singh \
-      Roll No.: ____________ \
-      B.Tech CSE (Cyber Security) \
-      Batch: 2023--2027
+      Piyush Swarnkar \
+      Ujjval Verma \
+      Saloni Tiwari \
     ],
     align(center)[
       #text(size: 12pt, weight: "bold")[Under the Guidance of:] \
@@ -135,8 +135,6 @@
     ],
   )
 
-  #v(1.5cm)
-  #text(size: 13pt, weight: "bold")[Academic Year 2024--2025]
 ]
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -152,7 +150,7 @@
 
 #v(1cm)
 
-This is to certify that the project titled *"CogniSOC: AI-Powered SOC Threat Detection and Response System"* has been carried out by *Ankit Singh* (Roll No.: ____________) under my supervision and guidance during the academic year 2024--2025 as part of the Internship Program at *HCLTech*.
+This is to certify that the project titled *"CogniSOC: AI-Powered SOC Threat Detection and Response System"* has been carried out by *Ankit Singh, Piyush Swarnkar, Ujjval Verma, Saloni Tiwari* under my supervision and guidance during the academic year 2024--2025 as part of the Internship Program at *HCLTech*.
 
 This project is a bona fide record of the work done by the candidate and has not been submitted elsewhere for any other degree or diploma.
 
@@ -243,6 +241,7 @@ The system was validated using *Atomic Red Team* attack simulations across six M
 // ════════════════════════════════════════════════════════════════════════════
 // TABLE OF CONTENTS
 // ════════════════════════════════════════════════════════════════════════════
+// ════════════════════════════════════════════════════════════════════════════
 #pagebreak()
 #set page(numbering: "i")
 #counter(page).update(1)
@@ -254,7 +253,7 @@ The system was validated using *Atomic Red Team* attack simulations across six M
 ]
 
 #v(0.5cm)
-#outline(indent: 1.5em, depth: 3)
+#outline(title: none, indent: 1.5em, depth: 3)
 
 // ════════════════════════════════════════════════════════════════════════════
 // LIST OF FIGURES
@@ -1239,7 +1238,7 @@ All seven attack simulations were successfully detected by the CogniSOC system w
 
 #figure(
   image("images/thehive_push_output.png", width: 100%),
-  caption: [Terminal output showing successful case creation in TheHive.],
+  caption: [Complete pipeline execution output showing all five stages.],
   kind: image,
 ) <fig-thehive-push-2>
 

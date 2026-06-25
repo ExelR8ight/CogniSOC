@@ -11,3 +11,5 @@ htmlcov/
 .env.*
 soc_ml_engine/outputs/*
 !soc_ml_engine/outputs/suspicious_events.sample.json
+
+archive/

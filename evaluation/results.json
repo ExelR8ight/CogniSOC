@@ -1,0 +1,42 @@
+{
+  "Baseline_Rules_Only": {
+    "confusion_matrix": {
+      "tp": 3,
+      "fp": 0,
+      "tn": 40,
+      "fn": 25,
+      "precision": 1.0,
+      "recall": 0.1071,
+      "f1": 0.1935,
+      "fpr": 0.0,
+      "accuracy": 0.6324,
+      "total_alerts": 3
+    },
+    "total_alerts": 3
+  },
+  "CogniSOC_Ablation": {
+    "Config_A_IF_Only": {
+      "tp": 9,
+      "fp": 0,
+      "tn": 40,
+      "fn": 12,
+      "precision": 1.0,
+      "recall": 0.4286,
+      "f1": 0.6,
+      "fpr": 0.0,
+      "accuracy": 0.8033,
+      "total_alerts": 9
+    },
+    "Config_B_IF_Correlation": {
+      "total_incidents": 3
+    },
+    "Config_C_Full_System": {
+      "total_high_priority_incidents": 3
+    }
+  },
+  "Alert_Volume_Reduction": {
+    "Rules_vs_IF": -200.0,
+    "Rules_vs_Correlation": 0.0,
+    "Rules_vs_Full_System": 0.0
+  }
+}

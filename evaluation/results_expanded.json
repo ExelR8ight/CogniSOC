@@ -1,0 +1,65 @@
+{
+  "technique_recall": {
+    "T1048.003": {
+      "total": 6,
+      "rules_detected": 0,
+      "if_detected": 6
+    },
+    "T1046": {
+      "total": 6,
+      "rules_detected": 0,
+      "if_detected": 6
+    },
+    "T1003.001": {
+      "total": 4,
+      "rules_detected": 0,
+      "if_detected": 0
+    },
+    "T1059.001": {
+      "total": 3,
+      "rules_detected": 3,
+      "if_detected": 3
+    },
+    "T1059.003": {
+      "total": 3,
+      "rules_detected": 0,
+      "if_detected": 0
+    },
+    "T1218.010": {
+      "total": 3,
+      "rules_detected": 0,
+      "if_detected": 0
+    },
+    "T1218.011": {
+      "total": 3,
+      "rules_detected": 0,
+      "if_detected": 0
+    }
+  },
+  "priority_distribution": {
+    "P1": 3,
+    "P2": 0,
+    "P3": 0,
+    "P4": 0
+  },
+  "confusion_matrices": {
+    "rules": {
+      "tp": 3,
+      "fp": 0,
+      "tn": 40,
+      "fn": 25
+    },
+    "isolation_forest": {
+      "tp": 15,
+      "fp": 0,
+      "tn": 40,
+      "fn": 13
+    }
+  },
+  "pipeline_volumes": {
+    "Rules": 3,
+    "Config_A_Raw": 10,
+    "Config_B_Correlated": 3,
+    "Config_C_Prioritized": 3
+  }
+}
